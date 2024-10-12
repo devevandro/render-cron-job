@@ -1,8 +1,16 @@
+import 'dotenv/config';
 import cron from "node-cron";
 
-cron.schedule("*/3 * * * *", async () => {
-  const health = await (await fetch(process.env.SOUNDS_RADIOS_API_URL)).json();
-  await (await fetch(process.env.INFISICAL_URL)).json();
+cron.schedule("*/5 * * * *", async () => {
+  let infisicalOk = '';
 
-  console.log(`${health?.message}`);
+  const response = await (await fetch(process.env.SOUNDS_RADIOS_API_URL)).json();
+  
+  fetch(process.env.INFISICAL_URL)
+    .then(() => {})
+    .catch(error => {
+      console.error('Erro de rede:', error);
+    });
+
+  console.log(`${response?.message}\n`);
 });
